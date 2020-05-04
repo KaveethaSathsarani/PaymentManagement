@@ -12,7 +12,7 @@ public class Payment {
 	
 	
 	public String insertPayment(Double DocCharge,Double HosCharge,Double AppoCharge,String PayType,String CardNo,String CardExpiryDate,String Card_CVNo,
-								Integer AID,Integer DocID)
+								Integer AID)
 	{
 	 
 	 String output = "";
@@ -41,8 +41,8 @@ public class Payment {
 		 }
 	 
 		 // create a prepared statement		 
-		 String query = " insert into payment(PayID,DocCharge,HosCharge,AppoCharge,Total,PayType,CardNo,CardExpiryDate,Card_CVNo,AID,DocID)"
-			 + " values (?,?,?,?,DocCharge+HosCharge+AppoCharge,?,?,?,?,?,?)";
+		 String query = " insert into payment(PayID,DocCharge,HosCharge,AppoCharge,Total,PayType,CardNo,CardExpiryDate,Card_CVNo,AID)"
+			 + " values (?,?,?,?,DocCharge+HosCharge+AppoCharge,?,?,?,?,?)";
 	  
 		 PreparedStatement preparedStmt = con.prepareStatement(query);
 		 // binding values
@@ -55,7 +55,6 @@ public class Payment {
 		 preparedStmt.setString(7, CardExpiryDate);
 		 preparedStmt.setString(8, Card_CVNo);
 		 preparedStmt.setInt(9, AID);
-		 preparedStmt.setInt(10, DocID); 
 	 
 		 preparedStmt.execute();
 		 con.close();
@@ -88,7 +87,7 @@ public class Payment {
 		 // Prepare the html table to be displayed
 	 
 		 output = "<table border=\"1\"><tr><th>PayID</th><th>DocCharge</th><th>HosCharge</th><th>AppoCharge</th><th>Total</th>"
-	 		+ "<th>PayType</th><th>CardNo</th><th>CardExpiryDate</th><th>Card_CVNo</th><th>AID</th><th>DocID</th></tr>";
+	 		+ "<th>PayType</th><th>CardNo</th><th>CardExpiryDate</th><th>Card_CVNo</th><th>AID</th></tr>";
 	 
 		 String query = "select * from payment";
 		 Statement stmt = con.createStatement();
@@ -107,7 +106,7 @@ public class Payment {
 			 String CardExpiryDate = rs.getString("CardExpiryDate");
 			 String Card_CVNo = rs.getString("Card_CVNo");
 			 String AID = Integer.toString(rs.getInt("AID"));
-			 String DocID = Integer.toString(rs.getInt("DocID"));
+			
 	  
 			 // Add into the html table
 			 output += "<tr><td>" + PayID + "</td>";
@@ -120,7 +119,7 @@ public class Payment {
 			 output += "<td>" + CardExpiryDate + "</td>";
 			 output += "<td>" + Card_CVNo + "</td>";
 			 output += "<td>" + AID + "</td>";
-			 output += "<td>" + DocID + "</td>";
+			
 	 
 		 }
 	 
@@ -139,7 +138,7 @@ public class Payment {
 	
 	
 	public String updatePayment(Integer PayID,Double DocCharge,Double HosCharge,Double AppoCharge,String PayType,String CardNo,String CardExpiryDate,String Card_CVNo,
-			Integer AID,Integer DocID)
+			Integer AID)
 	{
 		
 	 String output = "";
@@ -173,7 +172,7 @@ public class Payment {
 		 }
 		 
 		 // create a prepared statement
-		 String query = "UPDATE payment SET DocCharge=?,HosCharge=?,AppoCharge=?,PayType=?,CardNo=?,CardExpiryDate=?,Card_CVNo=?,AID=?,DocID=? WHERE PayID=?";
+		 String query = "UPDATE payment SET DocCharge=?,HosCharge=?,AppoCharge=?,PayType=?,CardNo=?,CardExpiryDate=?,Card_CVNo=?,AID=? WHERE PayID=?";
 		 PreparedStatement preparedStmt = con.prepareStatement(query);
 		 // binding values
 	 
@@ -185,7 +184,6 @@ public class Payment {
 		 preparedStmt.setString(6, CardExpiryDate);
 		 preparedStmt.setString(7, Card_CVNo);
 		 preparedStmt.setInt(8, AID);
-		 preparedStmt.setInt(9, DocID);
 		 preparedStmt.setInt(10, PayID);
 	 
 		 // execute the statement

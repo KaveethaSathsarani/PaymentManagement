@@ -51,15 +51,14 @@ public class PaymentFunction {
 		Double DocCharge = payObject.get("DocCharge").getAsDouble();
 		Double HosCharge = payObject.get("HosCharge").getAsDouble();
 		Double AppoCharge = payObject.get("AppoCharge").getAsDouble();
-		//Double Total = payObject.get("Total").getAsDouble();
 		String PayType = payObject.get("PayType").getAsString();
 		String CardNo = payObject.get("CardNo").getAsString();
 		String CardExpiryDate = payObject.get("CardExpiryDate").getAsString();
 		String Card_CVNo =payObject.get("Card_CVNo").getAsString();
 		Integer AID = payObject.get("AID").getAsInt();
-		Integer DocID = payObject.get("DocID").getAsInt();
+		
 	 
-		String output = payObj.insertPayment(DocCharge, HosCharge, AppoCharge, PayType, CardNo, CardExpiryDate, Card_CVNo, AID, DocID);
+		String output = payObj.insertPayment(DocCharge, HosCharge, AppoCharge, PayType, CardNo, CardExpiryDate, Card_CVNo, AID);
 	 
 		return output;
 	
@@ -79,15 +78,14 @@ public class PaymentFunction {
 		Double DocCharge = payObject.get("DocCharge").getAsDouble();
 		Double HosCharge = payObject.get("HosCharge").getAsDouble();
 		Double AppoCharge = payObject.get("AppoCharge").getAsDouble();
-		//Double Total = payObject.get("Total").getAsDouble();
 		String PayType = payObject.get("PayType").getAsString();
 		String CardNo = payObject.get("CardNo").getAsString();
 		String CardExpiryDate = payObject.get("CardExpiryDate").getAsString();
 		String Card_CVNo =payObject.get("Card_CVNo").getAsString();
 		Integer AID = payObject.get("AID").getAsInt();
-		Integer DocID = payObject.get("DocID").getAsInt();
+		
 	 
-		String output = payObj.updatePayment(PayID,DocCharge, HosCharge, AppoCharge, PayType, CardNo, CardExpiryDate, Card_CVNo, AID, DocID);
+		String output = payObj.updatePayment(PayID,DocCharge, HosCharge, AppoCharge, PayType, CardNo, CardExpiryDate, Card_CVNo, AID);
 	 
 		return output;
 	
