@@ -19,8 +19,12 @@ pageEncoding="ISO-8859-1"%>
 		<h1>Payment</h1>
 		
 		<form id="formPayment" name="formPayment">
+		
+			Payment ID:
+ 			<input id="PayID" name="PayID" type="text"
+ 					class="form-control form-control-sm" readonly>
 			
- 			 Doctor Charge:
+ 			<br> Doctor Charge:
  			<input id="DocCharge" name="DocCharge" type="text"
  					class="form-control form-control-sm">
  					
