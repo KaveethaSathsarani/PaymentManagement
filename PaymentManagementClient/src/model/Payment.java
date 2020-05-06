@@ -11,8 +11,7 @@ import util.DBHandler;
 public class Payment {
 	
 	
-	public String insertPayment(Double DocCharge,Double HosCharge,Double AppoCharge,String PayType,String CardNo,String CardExpiryDate,String Card_CVNo,
-								Integer AID)
+	public String insertPayment(Double DocCharge,Double HosCharge,Double AppoCharge,String PayType,String CardNo,String CardExpiryDate,String Card_CVNo,int AppoID)
 	{
 	 
 	 String output = "";
@@ -41,10 +40,11 @@ public class Payment {
 		 }
 	 
 		 // create a prepared statement		 
-		 String query = " insert into payment(PayID,DocCharge,HosCharge,AppoCharge,Total,PayType,CardNo,CardExpiryDate,Card_CVNo,AID)"
+		 String query = " insert into payment(PayID,DocCharge,HosCharge,AppoCharge,Total,PayType,CardNo,CardExpiryDate,Card_CVNo,AppoID)"
 			 + " values (?,?,?,?,DocCharge+HosCharge+AppoCharge,?,?,?,?,?)";
 	  
 		 PreparedStatement preparedStmt = con.prepareStatement(query);
+		 
 		 // binding values
 		 preparedStmt.setInt(1, 0);
 		 preparedStmt.setDouble(2, DocCharge);
@@ -54,21 +54,26 @@ public class Payment {
 		 preparedStmt.setString(6, CardNo);
 		 preparedStmt.setString(7, CardExpiryDate);
 		 preparedStmt.setString(8, Card_CVNo);
-		 preparedStmt.setInt(9, AID);
+		 preparedStmt.setInt(9, AppoID);
 	 
 		 preparedStmt.execute();
 		 con.close();
-		 output = "Inserted successfully";
+		 
+		 String newPayment = readPayment();
+		 output = "{\"status\":\"success\", \"data\": \"" +
+				 newPayment + "\"}";  
+		 System.out.println(output);
 		 
 	 }
 	 catch (Exception e)
 	 {
-		 output = "Error while inserting the payment.";
-		 System.err.println(e.getMessage());	
+		
+		 output = "{\"status\":\"error\", \"data\":"
+				 + "\"Error while inserting the payment.\"}";
+				 System.err.println(e.getMessage()); 
 	 }
 	 	 return output;
 	 }
-	
 	
 	
 	public String readPayment()
@@ -86,8 +91,8 @@ public class Payment {
 		 }
 		 // Prepare the html table to be displayed
 	 
-		 output = "<table border=\"1\"><tr><th>PayID</th><th>DocCharge</th><th>HosCharge</th><th>AppoCharge</th><th>Total</th>"
-	 		+ "<th>PayType</th><th>CardNo</th><th>CardExpiryDate</th><th>Card_CVNo</th><th>AID</th></tr>";
+		 output = "<table border='1'><tr><th>PayID</th><th>DocCharge</th><th>HosCharge</th><th>AppoCharge</th><th>Total</th>"
+	 		+ "<th>PayType</th><th>CardNo</th><th>CardExpiryDate</th><th>Card_CVNo</th><th>AppoID</th><th>Update</th><th>Remove</th></tr>";
 	 
 		 String query = "select * from payment";
 		 Statement stmt = con.createStatement();
@@ -105,11 +110,12 @@ public class Payment {
 			 String CardNo = rs.getString("CardNo");
 			 String CardExpiryDate = rs.getString("CardExpiryDate");
 			 String Card_CVNo = rs.getString("Card_CVNo");
-			 String AID = Integer.toString(rs.getInt("AID"));
+			 String AppoID = Integer.toString(rs.getInt("AppoID"));
 			
-	  
 			 // Add into the html table
-			 output += "<tr><td>" + PayID + "</td>";
+			 output += "<tr><td><input id='hidPayIDUpdate'"
+					+ "name='hidPayIDUpdate' type='hidden'"
+					+ "value='" + PayID + "'>"+PayID+"</td>"; 			 
 			 output += "<td>" + DocCharge + "</td>";
 			 output += "<td>" + HosCharge + "</td>";
 			 output += "<td>" + AppoCharge + "</td>";
@@ -118,8 +124,15 @@ public class Payment {
 			 output += "<td>" + CardNo + "</td>";
 			 output += "<td>" + CardExpiryDate + "</td>";
 			 output += "<td>" + Card_CVNo + "</td>";
-			 output += "<td>" + AID + "</td>";
-			
+			 output += "<td>" + AppoID + "</td>";
+			 
+			// buttons
+			 output += "<td><input name='btnUpdate' type='button' value='Update'"
+			 		+ "class='btnUpdate btn btn-secondary'></td>"
+			 		+ "<td><input name='btnRemove' type='button'"
+			 		+ "value='Remove'"
+			 		+ "class='btnRemove btn btn-danger' data-PayID='"
+			 		+ PayID + "'>" + "</td></tr>"; 
 	 
 		 }
 	 
@@ -136,9 +149,7 @@ public class Payment {
      }
 	
 	
-	
-	public String updatePayment(Integer PayID,Double DocCharge,Double HosCharge,Double AppoCharge,String PayType,String CardNo,String CardExpiryDate,String Card_CVNo,
-			Integer AID)
+	public String updatePayment(Integer PayID,Double DocCharge,Double HosCharge,Double AppoCharge,Double Total,String PayType,String CardNo,String CardExpiryDate,String Card_CVNo,Integer AppoID)
 	{
 		
 	 String output = "";
@@ -172,32 +183,39 @@ public class Payment {
 		 }
 		 
 		 // create a prepared statement
-		 String query = "UPDATE payment SET DocCharge=?,HosCharge=?,AppoCharge=?,PayType=?,CardNo=?,CardExpiryDate=?,Card_CVNo=?,AID=? WHERE PayID=?";
+		 String query = "UPDATE payment SET DocCharge=?,HosCharge=?,AppoCharge=?,Total=?,PayType=?,CardNo=?,CardExpiryDate=?,Card_CVNo=?,AppoID=? WHERE PayID=?";
 		 PreparedStatement preparedStmt = con.prepareStatement(query);
+		 
 		 // binding values
-	 
 		 preparedStmt.setDouble(1, DocCharge);
 		 preparedStmt.setDouble(2, HosCharge);
 		 preparedStmt.setDouble(3, AppoCharge);
-		 preparedStmt.setString(4, PayType);
-		 preparedStmt.setString(5, CardNo);
-		 preparedStmt.setString(6, CardExpiryDate);
-		 preparedStmt.setString(7, Card_CVNo);
-		 preparedStmt.setInt(8, AID);
+		 preparedStmt.setDouble(4, Total);
+		 preparedStmt.setString(5, PayType);
+		 preparedStmt.setString(6, CardNo);
+		 preparedStmt.setString(7, CardExpiryDate);
+		 preparedStmt.setString(8, Card_CVNo);
+		 preparedStmt.setInt(9, AppoID);
 		 preparedStmt.setInt(10, PayID);
 	 
 		 // execute the statement
 		 preparedStmt.execute();
 		 con.close();
-		 output = "Updated successfully";
+		 
+		 String newPayment = readPayment();
+		 output = "{\"status\":\"success\", \"data\": \"" +
+				 	newPayment + "\"}"; 
+		 
 	 }
 	 catch (Exception e)
 	 {
-		 output = "Error while updating the payment.";
-		 System.err.println(e.getMessage());
+		 output = "{\"status\":\"error\", \"data\":"
+				 +"\"Error while updating the payment.\"}";
+				 System.err.println(e.getMessage()); 
 	 }
 	 	return output;
 	 }
+	
 	
 	public String deletePayment(Integer PayID)
 	{
@@ -218,20 +236,27 @@ public class Payment {
 		 {
 			 return "PayID cannot be null";
 		 }
+		 
 		 // create a prepared statement
 		 String query = "delete from payment where PayID=?";
 		 PreparedStatement preparedStmt = con.prepareStatement(query);
+		 
 		 // binding values
 		 preparedStmt.setInt(1, PayID);
 		 // execute the statement
 		 preparedStmt.execute();
 		 con.close();
-		 output = "Deleted successfully";
+
+		 String newPayment = readPayment();
+		 output = "{\"status\":\"success\", \"data\": \"" +
+				 	newPayment + "\"}"; 
+		 
 	 }
 	 catch (Exception e)
 	 {
-		 output = "Error while deleting the payment.";
-		 System.err.println(e.getMessage());
+		 output = "{\"status\":\"error\", \"data\":"
+				 +"\"Error while deleting the payment.\"}";
+				 System.err.println(e.getMessage()); 
 	 }
 	 	return output;
 	 } 
