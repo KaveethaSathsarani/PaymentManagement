@@ -58,10 +58,8 @@ function validatePaymentForm()
 	
 	   if(document.getElementById("PayType").value == "0")
 	   {
-	     
 	      return "Select payment type";
 	   }
-	
 	
  // CardNo-----------------------------------------------------------------------
 	if ($("#CardNo").val().trim() == "")
