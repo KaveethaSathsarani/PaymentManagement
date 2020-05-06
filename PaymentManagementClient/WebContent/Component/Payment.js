@@ -151,7 +151,7 @@ $(document).on("click", ".btnRemove", function(event)
 				 {
 					 url : "PaymentAPI",
 					 type : "DELETE",
-					 data : "PayID=" + $(this).data("PayID"),
+					 data : "PayID=" + $(this).data("payid"),
 					 dataType : "text",
 					 complete : function(response, status)
 					 {

@@ -131,7 +131,7 @@ public class Payment {
 			 		+ "class='btnUpdate btn btn-secondary'></td>"
 			 		+ "<td><input name='btnRemove' type='button'"
 			 		+ "value='Remove'"
-			 		+ "class='btnRemove btn btn-danger' data-PayID='"
+			 		+ "class='btnRemove btn btn-danger' data-payid='"
 			 		+ PayID + "'>" + "</td></tr>"; 
 	 
 		 }

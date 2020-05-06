@@ -83,8 +83,7 @@ public class PaymentAPI extends HttpServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-		Map paras = getParasMap(request); 
-		
+		Map paras = getParasMap(request); 		
 		String output = payObj.deletePayment(Integer.parseInt(String.valueOf(paras.get("PayID"))));
 		
 		response.getWriter().write(output); 
